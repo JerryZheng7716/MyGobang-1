@@ -7,8 +7,6 @@ public class TipPanel extends JPanel{
     private Color BlackChessColor = Color.black;
     private Color BackgroudColor = Color.yellow;
 
-
-
     // 棋子
     private ChessPoint chessPoint = new ChessPoint();
     // 是否绘制好

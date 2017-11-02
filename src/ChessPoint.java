@@ -6,6 +6,10 @@ public class ChessPoint {
     private Color color;//颜色
     public static final int DIAMETER=30;//直径
 
+    public ChessPoint(){
+        // pass
+    }
+
     public ChessPoint(int x,int y,Color color){
         this.x=x;
         this.y=y;
