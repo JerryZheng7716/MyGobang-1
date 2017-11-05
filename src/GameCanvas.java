@@ -1,15 +1,45 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Ellipse2D;
 
-public class GameCanvas extends JPanel{
+public class GameCanvas extends JPanel implements MouseListener{
     public static final int MARGIN=30;//边距
     public static final int GRID_SPAN=35;//网格间距
     public static final int ROWS=15;//棋盘行数
     public static final int COLS=15;//棋盘列数
 
+    ChessPoint[] chessPoints = new ChessPoint[(ROWS + 1) * (COLS + 1)]; // 16*16个交点 16*16个棋子
+    boolean isBlack = true;
+    int chessCount = 0; // 棋盘上棋子的个数
+    int xIndex, yIndex; // 最后一枚棋子的坐标
+    Color colorTemp; // 棋子的颜色
 
     Image img;
+
+    // 构造方法
+    public GameCanvas(){
+        addMouseListener(this);
+        addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int x = (e.getX() - MARGIN + GRID_SPAN / 2) / GRID_SPAN;
+                int y = (e.getY() - MARGIN + GRID_SPAN / 2) / GRID_SPAN;
+                if (xIndex < 0 || xIndex > ROWS || yIndex < 0 || yIndex > 0){
+                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                }
+                else setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+        });
+    }
+
+
+
 
     public void paintComponent(Graphics g){
 
@@ -23,14 +53,84 @@ public class GameCanvas extends JPanel{
 //        int y=(FHeight-imgHeight)/2;
 //        g.drawImage(img, x, y, null);
 
-
+        // 画棋盘
         for(int i=0;i<=ROWS;i++){//画横线
             g.drawLine(MARGIN, MARGIN+i*GRID_SPAN, MARGIN+COLS*GRID_SPAN, MARGIN+i*GRID_SPAN);
-//            g.drawLine();
         }
         for(int i=0;i<=COLS;i++){//画竖线
             g.drawLine(MARGIN+i*GRID_SPAN, MARGIN, MARGIN+i*GRID_SPAN, MARGIN+ROWS*GRID_SPAN);
+        }
 
+        // 画棋子
+        for(int i = 0; i < chessCount; i++){
+            // 交叉点的坐标
+            int xPos = chessPoints[i].getX() * GRID_SPAN + MARGIN; // x
+            int yPos = chessPoints[i].getY() * GRID_SPAN + MARGIN; // y
+            RadialGradientPaint paint;
+            Graphics2D g2D = (Graphics2D)g;
+            colorTemp = chessPoints[i].getColor();
+            if(colorTemp == Color.BLACK){
+                paint = new RadialGradientPaint(xPos - ChessPoint.DIAMETER / 2 + 25, yPos - ChessPoint.DIAMETER / 2 + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
+                g2D.setPaint(paint);
+            }
+            if (colorTemp == Color.WHITE){
+                paint = new RadialGradientPaint(xPos - ChessPoint.DIAMETER / 2 + 25, yPos - ChessPoint.DIAMETER / 2 + 10, 70, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
+                g2D.setPaint(paint);
+            }
+
+            Ellipse2D e2D = new Ellipse2D.Float(xPos - ChessPoint.DIAMETER / 2, yPos - ChessPoint.DIAMETER / 2,35,35); // 圆形
+            g2D.fill(e2D);
         }
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO
+        // 游戏结束不能下
+
+        String colorName = isBlack?"黑棋":"白棋";
+
+        xIndex = (e.getX() - MARGIN + GRID_SPAN / 2) / GRID_SPAN;
+        yIndex = (e.getY() - MARGIN + GRID_SPAN / 2) / GRID_SPAN;
+        System.out.println("点击 (" + xIndex + "\t, "+ yIndex + ")");
+        // 超出行和列的范围就不能下
+        if (xIndex < 0 || xIndex > ROWS || yIndex < 0 || yIndex > COLS){
+            return;
+        }
+        // TODO
+        // 已经有棋子的地方也不能下
+        ChessPoint chessPoint = new ChessPoint(xIndex, yIndex, isBlack?Color.BLACK:Color.WHITE);
+        chessPoints[chessCount] = chessPoint;
+        chessCount ++;
+        // 重画面板
+        repaint();
+
+        // TODO
+        // 如果赢了就弹出提示信息
+
+        // 交换落子方
+        isBlack = !isBlack;
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+
 }
