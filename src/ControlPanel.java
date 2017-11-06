@@ -58,14 +58,15 @@ public class ControlPanel extends JPanel {
                 System.out.println("开始游戏");
 //                chessBoard.restartGame();
             }
-            else if (obj==restartButton){
-                // 重新开始
-                System.out.println("重新开始");
-            }
             else if (obj==backButton){
                 // 悔棋
                 System.out.println("悔棋");
                 gameCanvas.Back();
+            }
+            else if (obj==restartButton){
+                // 重新开始
+                System.out.println("重新开始");
+                gameCanvas.restartGame();
             }
         }
     }

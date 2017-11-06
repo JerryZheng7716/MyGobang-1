@@ -11,15 +11,18 @@ public class GameMenu extends JMenuBar{
     private JMenuItem miBackButton = new JMenuItem("悔棋");
     private JMenuItem mirestartButton = new JMenuItem("重新开始");
 
-    private JMenuItem mAuthor = new JMenuItem("作者");
-    private JMenuItem mGithub = new JMenuItem("Github");
+    private JMenuItem miAuthor = new JMenuItem("作者");
+    private JMenuItem miGithub = new JMenuItem("Github");
 
 
     private JCheckBoxMenuItem miAsWindows = new JCheckBoxMenuItem("Windows风格");
     private JCheckBoxMenuItem miAsMotif = new JCheckBoxMenuItem("Motif风格");
     private JCheckBoxMenuItem miAsMetal = new JCheckBoxMenuItem("Metal风格", true);
 
-    public GameMenu(){
+    MyItemListener myItemListener;
+    private GameCanvas gameCanvas;
+    public GameMenu(GameCanvas gameCanvas){
+        this.gameCanvas = gameCanvas;
         this.add(mGame);
         this.add(mWindowStyle);
         this.add(mInfo);
@@ -28,8 +31,13 @@ public class GameMenu extends JMenuBar{
         mGame.add(miBackButton);
         mGame.add(mirestartButton);
 
-        mInfo.add(mAuthor);
-        mInfo.add(mGithub);
+        myItemListener = new MyItemListener();
+        miStartButton.addActionListener(myItemListener);
+        miBackButton.addActionListener(myItemListener);
+        mirestartButton.addActionListener(myItemListener);
+
+        mInfo.add(miAuthor);
+        mInfo.add(miGithub);
 
         mWindowStyle.add(miAsWindows);
         mWindowStyle.add(miAsMotif);
@@ -41,18 +49,17 @@ public class GameMenu extends JMenuBar{
             Object obj=e.getSource();//获得事件源
             if(obj==miStartButton){
                 // 开始游戏
-                //JFiveFrame.this内部类引用外部类
                 System.out.println("开始游戏");
-                // chessBoard.restartGame();
             }
             else if (obj==mirestartButton){
                 // 悔棋
                 System.out.println("悔棋");
-                // chessBoard.goback();
+                gameCanvas.Back();
             }
             else if (obj==miBackButton){
                 // 重新开始
                 System.out.println("重新开始");
+                gameCanvas.restartGame();
             }
 
         }

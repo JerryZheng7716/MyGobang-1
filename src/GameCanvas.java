@@ -170,4 +170,13 @@ public class GameCanvas extends JPanel implements MouseListener {
         isBlack = !isBlack;
         repaint();
     }
+
+    public void restartGame(){
+        for (int i = 0; i < chessPoints.length; i++){
+            chessPoints[i] = null;
+        }
+        isBlack = true;
+        chessCount = 0;
+        repaint();
+    }
 }
