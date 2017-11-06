@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
+// 提示面板
 public class TipPanel extends JPanel{
     // 设置棋子的颜色和提示板的颜色
     private Color WhiteChessColor = Color.white;
@@ -22,6 +23,8 @@ public class TipPanel extends JPanel{
         // 构造方法，画旗子
         // TODO
     }
+
+    // 获取窗体宽度
     public void fanning(){
         boxWidth = this.getWidth();
         boxHeight = this.getHeight();
@@ -35,10 +38,9 @@ public class TipPanel extends JPanel{
         }
 
         g.drawLine(10,10,45,10); // 第一条横线
-        g.drawLine(45,10,45,45); // 第二条横线
+        g.drawLine(10,45,45,45); // 第二条横线
         g.drawLine(10,10,10,45); // 第一条竖线
         g.drawLine(45,10,45,45); // 第二条竖线
-
 
     }
 }

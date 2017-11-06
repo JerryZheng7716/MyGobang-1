@@ -3,6 +3,7 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 
+// 控制面板
 public class ControlPanel extends JPanel {
     private JLabel next;
     private JPanel toolBar,tipBar;

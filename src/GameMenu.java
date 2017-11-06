@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+// 游戏菜单
 public class GameMenu extends JMenuBar{
     private JMenu mGame = new JMenu("游戏");
     private JMenu mWindowStyle = new JMenu("窗体风格");
@@ -21,6 +22,7 @@ public class GameMenu extends JMenuBar{
 
     MyItemListener myItemListener;
     private GameCanvas gameCanvas;
+
     public GameMenu(GameCanvas gameCanvas){
         this.gameCanvas = gameCanvas;
         this.add(mGame);
@@ -61,7 +63,6 @@ public class GameMenu extends JMenuBar{
                 System.out.println("重新开始");
                 gameCanvas.restartGame();
             }
-
         }
     }
 }

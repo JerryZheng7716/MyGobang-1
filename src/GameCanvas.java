@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 
+// 游戏场景
 public class GameCanvas extends JPanel implements MouseListener {
 
     public static final int MARGIN = 30;//边距

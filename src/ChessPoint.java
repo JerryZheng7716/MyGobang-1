@@ -1,4 +1,5 @@
 import java.awt.*;
+
 // 单个棋子
 public class ChessPoint {
     private int x;//棋盘中的x索引

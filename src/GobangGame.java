@@ -1,13 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 
+// 主类
 public class GobangGame extends JFrame {
-    private ControlPanel controlPanel;
-    private GameCanvas gameCanvas;
-    private GameMenu gameMenu;
+    private ControlPanel controlPanel; // 左侧控制面板
+    private GameCanvas gameCanvas;     // 右侧游戏场景
+    private GameMenu gameMenu;         // 上方游戏菜单
+
     public GobangGame(){
         gameCanvas = new GameCanvas();
-        gameMenu = new GameMenu();
+        gameMenu = new GameMenu(gameCanvas);
         controlPanel = new ControlPanel(gameCanvas);
 
         // 将游戏场景 控制面板 菜单加进窗口
@@ -24,11 +26,14 @@ public class GobangGame extends JFrame {
         this.setVisible(true);
         play();
     }
+
     public void play(){
         Thread thread = new Thread();
         thread.start();
-//        controlPanel.requestFocus();
+        // controlPanel.requestFocus();
     }
+
+    // 主函数
     public static void main(String[] args) {
         GobangGame gobangGame = new GobangGame();
         gobangGame.setVisible(true);
