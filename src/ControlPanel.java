@@ -13,7 +13,11 @@ public class ControlPanel extends JPanel {
 
     MyItemListener myItemListener;
 
-    public ControlPanel() {
+    private GameCanvas gameCanvas;
+
+    public ControlPanel(GameCanvas gameCanvas) {
+        this.gameCanvas = gameCanvas;
+
         this.setLayout(new GridLayout(2,1));
 
         tipBar = new JPanel(new GridLayout(2,1));
@@ -37,12 +41,12 @@ public class ControlPanel extends JPanel {
         backButton.addActionListener(myItemListener);
         restartButton.addActionListener(myItemListener);
 
-//        toolBar.setLayout(new FlowLayout( FlowLayout.LEFT,20,40));
+        // toolBar.setLayout(new FlowLayout( FlowLayout.LEFT,20,40));
 
         add(tipBar, BorderLayout.NORTH);
         add(toolBar, BorderLayout.SOUTH);
         this.setBorder(border);
-//        this.setSize(200,650);
+        // this.setSize(200,650);
     }
 
     private class MyItemListener implements ActionListener {
@@ -61,7 +65,7 @@ public class ControlPanel extends JPanel {
             else if (obj==backButton){
                 // 悔棋
                 System.out.println("悔棋");
-//                chessBoard.goback();
+                gameCanvas.Back();
             }
         }
     }

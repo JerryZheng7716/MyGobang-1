@@ -6,9 +6,9 @@ public class GobangGame extends JFrame {
     private GameCanvas gameCanvas;
     private GameMenu gameMenu;
     public GobangGame(){
-        controlPanel = new ControlPanel();
         gameCanvas = new GameCanvas();
         gameMenu = new GameMenu();
+        controlPanel = new ControlPanel(gameCanvas);
 
         // 将游戏场景 控制面板 菜单加进窗口
         this.add(gameCanvas, BorderLayout.CENTER);
