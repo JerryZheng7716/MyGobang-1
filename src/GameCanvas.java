@@ -83,6 +83,11 @@ public class GameCanvas extends JPanel implements MouseListener{
         }
     }
 
+    // 调用鼠标单击事件
+    // 将坐标转化为索引
+    //
+    // 调用isExistChess 是否能落子
+    // 能落子将棋子加入数组
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO
@@ -92,13 +97,18 @@ public class GameCanvas extends JPanel implements MouseListener{
 
         xIndex = (e.getX() - MARGIN + GRID_SPAN / 2) / GRID_SPAN;
         yIndex = (e.getY() - MARGIN + GRID_SPAN / 2) / GRID_SPAN;
-        System.out.println("点击 (" + xIndex + "\t, "+ yIndex + ")");
+
         // 超出行和列的范围就不能下
         if (xIndex < 0 || xIndex > ROWS || yIndex < 0 || yIndex > COLS){
             return;
         }
+        System.out.println("点击 (" + xIndex + "\t, "+ yIndex + ")");
         // TODO
         // 已经有棋子的地方也不能下
+        if (isExistChess(xIndex, yIndex)){
+            return;
+        }
+
         ChessPoint chessPoint = new ChessPoint(xIndex, yIndex, isBlack?Color.BLACK:Color.WHITE);
         chessPoints[chessCount] = chessPoint;
         chessCount ++;
@@ -132,5 +142,15 @@ public class GameCanvas extends JPanel implements MouseListener{
 
     }
 
-
+    // 判断这个坐标是否存在棋子
+    // 存在返回 true
+    // 不存在返回 false
+    private boolean isExistChess(int x, int y){
+        for (int i = 0; i < chessPoints.length; i++){
+            if (chessPoints[i] != null && chessPoints[i].getX() == x && chessPoints[i].getY() == y){
+                return true;
+            }
+        }
+        return false;
+    }
 }

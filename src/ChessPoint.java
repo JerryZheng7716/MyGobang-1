@@ -16,13 +16,18 @@ public class ChessPoint {
         this.color=color;
     }
 
-    public int getX(){//拿到棋盘中x的索引
+    //拿到棋盘中x的索引
+    public int getX(){
         return x;
     }
+
+    //拿到棋盘中y的索引
     public int getY(){
         return y;
     }
-    public Color getColor(){//获得棋子的颜色
+
+    //获得棋子的颜色
+    public Color getColor(){
         return color;
     }
 }
