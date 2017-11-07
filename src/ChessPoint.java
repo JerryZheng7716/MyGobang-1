@@ -5,7 +5,7 @@ public class ChessPoint {
     private int x;//棋盘中的x索引
     private int y;//棋盘中的y索引
     private Color color;//颜色
-    public static final int DIAMETER=30;//直径
+    public static final int DIAMETER = 40;//直径
 
     public ChessPoint(){
         // pass

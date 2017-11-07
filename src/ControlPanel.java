@@ -10,23 +10,26 @@ public class ControlPanel extends JPanel {
     private JButton startButton, backButton, restartButton;
     private TipPanel tipPanel;
 
-    private Border border=new EtchedBorder(EtchedBorder.RAISED, Color.white, new Color(148,145,140));
+//    private Border border=new EtchedBorder(EtchedBorder.RAISED, Color.white, new Color(148,145,140));
 
     MyItemListener myItemListener;
 
     private GameCanvas gameCanvas;
+    private Image img;
 
     public ControlPanel(GameCanvas gameCanvas) {
+        img = Toolkit.getDefaultToolkit().getImage("img/ControlBoard.jpg");
+
         this.gameCanvas = gameCanvas;
 
         this.setLayout(new GridLayout(2,1));
 
         tipBar = new JPanel(new GridLayout(2,1));
         next = new JLabel("<html><H1>下一手</H1></html>");
-        tipPanel = new TipPanel();
+        tipPanel = new TipPanel(gameCanvas);
         tipBar.add(next, BorderLayout.NORTH);
         tipBar.add(tipPanel, BorderLayout.SOUTH);
-        tipBar.setBorder(border);
+//        tipBar.setBorder(border);
 
 
         toolBar = new JPanel(new GridLayout(3,1,0,20));
@@ -42,12 +45,18 @@ public class ControlPanel extends JPanel {
         backButton.addActionListener(myItemListener);
         restartButton.addActionListener(myItemListener);
 
-        // toolBar.setLayout(new FlowLayout( FlowLayout.LEFT,20,40));
-
         add(tipBar, BorderLayout.NORTH);
         add(toolBar, BorderLayout.SOUTH);
-        this.setBorder(border);
-        // this.setSize(200,650);
+//        this.setBorder(border);
+//         this.setSize(170,962);
+
+//        repaint();
+    }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        g.drawImage(img, 0, 0, this); //画背景图
     }
 
     private class MyItemListener implements ActionListener {
@@ -55,9 +64,8 @@ public class ControlPanel extends JPanel {
             Object obj=e.getSource();//获得事件源
             if(obj==startButton){
                 // 开始游戏
-                //JFiveFrame.this内部类引用外部类
                 System.out.println("开始游戏");
-//                chessBoard.restartGame();
+                // restartGame();
             }
             else if (obj==backButton){
                 // 悔棋

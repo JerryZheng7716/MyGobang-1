@@ -8,6 +8,7 @@ public class GobangGame extends JFrame {
     private GameMenu gameMenu;         // 上方游戏菜单
 
     public GobangGame(){
+
         gameCanvas = new GameCanvas();
         gameMenu = new GameMenu(gameCanvas);
         controlPanel = new ControlPanel(gameCanvas);
@@ -18,7 +19,7 @@ public class GobangGame extends JFrame {
         setJMenuBar(gameMenu);
 
         // 设置尺寸和不可改变大小
-        this.setSize(900,650);
+        this.setSize(1000,1012);
         this.setResizable(false);
 
         // 设置界面关闭事件

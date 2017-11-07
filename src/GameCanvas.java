@@ -6,21 +6,24 @@ import java.awt.geom.Ellipse2D;
 // 游戏场景
 public class GameCanvas extends JPanel implements MouseListener {
 
-    public static final int MARGIN = 30;//边距
-    public static final int GRID_SPAN = 35;//网格间距
+    public static final int MARGIN_LEFT = 71;   // 左边距
+    public static final int MARGIN_TOP = 220;   // 左边距
+    public static final int GRID_SPAN = 49;//网格间距
     public static final int ROWS = 15;//棋盘行数
     public static final int COLS = 15;//棋盘列数
 
-    ChessPoint[] chessPoints = new ChessPoint[(ROWS + 1) * (COLS + 1)]; // 16*16个交点 16*16个棋子
+    ChessPoint[] chessPoints = new ChessPoint[(ROWS) * (COLS)]; // 15*15个交点 15*15个棋子
     boolean isBlack = true; //黑棋先手
     public static int chessCount = 0; // 棋盘上棋子的个数
     private int xIndex, yIndex; // 最后一枚棋子的坐标
     private Color colorTemp; // 棋子的颜色
 
-    Image img;
+    private Image img;
 
     // 构造方法
     public GameCanvas() {
+
+        img = Toolkit.getDefaultToolkit().getImage("img/ChessBoard.jpg");
         addMouseListener(this);
         addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -30,8 +33,8 @@ public class GameCanvas extends JPanel implements MouseListener {
 
             @Override
             public void mouseMoved(MouseEvent e) {
-                int x = (e.getX() - MARGIN + GRID_SPAN / 2) / GRID_SPAN;
-                int y = (e.getY() - MARGIN + GRID_SPAN / 2) / GRID_SPAN;
+                int x = (e.getX() - MARGIN_LEFT + GRID_SPAN / 2) / GRID_SPAN;
+                int y = (e.getY() - MARGIN_TOP + GRID_SPAN / 2) / GRID_SPAN;
                 if (xIndex < 0 || xIndex > ROWS || yIndex < 0 || yIndex > 0) {
                     setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 } else setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -41,30 +44,23 @@ public class GameCanvas extends JPanel implements MouseListener {
 
 
     public void paintComponent(Graphics g) {
-
         super.paintComponent(g);//画棋盘
 
-//        int imgWidth= img.getWidth(this);
-//        int imgHeight=img.getHeight(this);//获得图片的宽度与高度
-//        int FWidth=getWidth();
-//        int FHeight=getHeight();//获得窗口的宽度与高度
-//        int x=(FWidth-imgWidth)/2;
-//        int y=(FHeight-imgHeight)/2;
-//        g.drawImage(img, x, y, null);
+        g.drawImage(img, 0, 0, this); //画背景图
 
         // 画棋盘
-        for (int i = 0; i <= ROWS; i++) {//画横线
-            g.drawLine(MARGIN, MARGIN + i * GRID_SPAN, MARGIN + COLS * GRID_SPAN, MARGIN + i * GRID_SPAN);
+        for (int i = 0; i < ROWS; i++) {//画横线
+            g.drawLine(MARGIN_LEFT, MARGIN_TOP + i * GRID_SPAN, MARGIN_LEFT + (COLS-1) * GRID_SPAN, MARGIN_TOP + i * GRID_SPAN);
         }
-        for (int i = 0; i <= COLS; i++) {//画竖线
-            g.drawLine(MARGIN + i * GRID_SPAN, MARGIN, MARGIN + i * GRID_SPAN, MARGIN + ROWS * GRID_SPAN);
+        for (int i = 0; i < COLS; i++) {//画竖线
+            g.drawLine(MARGIN_LEFT + i * GRID_SPAN, MARGIN_TOP, MARGIN_LEFT + i * GRID_SPAN, MARGIN_TOP + (ROWS-1) * GRID_SPAN);
         }
 
         // 画棋子
         for (int i = 0; i < chessCount; i++) {
             // 交叉点的坐标
-            int xPos = chessPoints[i].getX() * GRID_SPAN + MARGIN; // x
-            int yPos = chessPoints[i].getY() * GRID_SPAN + MARGIN; // y
+            int xPos = chessPoints[i].getX() * GRID_SPAN + MARGIN_LEFT; // x
+            int yPos = chessPoints[i].getY() * GRID_SPAN + MARGIN_TOP; // y
             RadialGradientPaint paint;
             Graphics2D g2D = (Graphics2D) g;
             colorTemp = chessPoints[i].getColor();
@@ -94,11 +90,11 @@ public class GameCanvas extends JPanel implements MouseListener {
 
         String colorName = isBlack ? "黑棋" : "白棋";
 
-        xIndex = (e.getX() - MARGIN + GRID_SPAN / 2) / GRID_SPAN;
-        yIndex = (e.getY() - MARGIN + GRID_SPAN / 2) / GRID_SPAN;
+        xIndex = (e.getX() - MARGIN_LEFT + GRID_SPAN / 2) / GRID_SPAN;
+        yIndex = (e.getY() - MARGIN_TOP + GRID_SPAN / 2) / GRID_SPAN;
 
         // 超出行和列的范围就不能下
-        if (xIndex < 0 || xIndex > ROWS || yIndex < 0 || yIndex > COLS) {
+        if (xIndex < 0 || xIndex > ROWS-1 || yIndex < 0 || yIndex > COLS-1) {
             return;
         }
         System.out.println("点击 (" + xIndex + "\t, " + yIndex + ")");
@@ -119,6 +115,10 @@ public class GameCanvas extends JPanel implements MouseListener {
 
         // 交换落子方
         isBlack = !isBlack;
+    }
+
+    public boolean getIsBlack(boolean isBlack){
+        return isBlack;
     }
 
     @Override
