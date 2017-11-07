@@ -19,7 +19,7 @@ public class GobangGame extends JFrame {
         setJMenuBar(gameMenu);
 
         // 设置尺寸和不可改变大小
-        this.setSize(1000,1012);
+        this.setSize(830,850);
         this.setResizable(false);
 
         // 设置界面关闭事件

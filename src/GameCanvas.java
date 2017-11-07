@@ -6,9 +6,9 @@ import java.awt.geom.Ellipse2D;
 // 游戏场景
 public class GameCanvas extends JPanel implements MouseListener {
 
-    public static final int MARGIN_LEFT = 71;   // 左边距
-    public static final int MARGIN_TOP = 220;   // 左边距
-    public static final int GRID_SPAN = 49;//网格间距
+    public static final int MARGIN_LEFT = 75;   // 左边距
+    public static final int MARGIN_TOP = 195;   // 左边距
+    public static final int GRID_SPAN = 40;//网格间距
     public static final int ROWS = 15;//棋盘行数
     public static final int COLS = 15;//棋盘列数
 
@@ -22,7 +22,7 @@ public class GameCanvas extends JPanel implements MouseListener {
 
     // 构造方法
     public GameCanvas() {
-
+        this.setPreferredSize(new Dimension(666, 800));//关键代码,设置JPanel的大小
         img = Toolkit.getDefaultToolkit().getImage("img/ChessBoard.jpg");
         addMouseListener(this);
         addMouseMotionListener(new MouseMotionListener() {
