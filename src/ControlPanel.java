@@ -4,11 +4,13 @@ import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+
 // 控制面板
 public class ControlPanel extends JPanel {
-    private JLabel next;
+    private JPanel emptyJpanel;
     private JPanel toolBar,tipBar;
     private JButton startButton, backButton, restartButton;
+    private JButton emptyButton_one, emptyButton_two, emptyButton_three;
     private TipPanel tipPanel;
 
 //    private Border border=new EtchedBorder(EtchedBorder.RAISED, Color.white, new Color(148,145,140));
@@ -28,35 +30,42 @@ public class ControlPanel extends JPanel {
 
 
     public ControlPanel(GameCanvas gameCanvas) {
-        this.setPreferredSize(new Dimension(164, 800));//关键代码,设置JPanel的大小
-        img = Toolkit.getDefaultToolkit().getImage("img/ControlBoard.jpg");
+        this.setPreferredSize(new Dimension(164, 800));// 设置自身JPanel的大小
+
+        img = Toolkit.getDefaultToolkit().getImage("img/ControlBoard.jpg"); // 获取背景图
 
         this.gameCanvas = gameCanvas;
 
         this.setLayout(new GridLayout(2,1));
 
-        tipBar = new JPanel(new GridLayout(2,1));
-//        next = new JLabel("<html><H1>下一手</H1></html>");
+        tipBar = new JPanel();
+
+        emptyJpanel = new JPanel();
+        emptyJpanel.setBackground(null);
+        emptyJpanel.setOpaque(false);
+        emptyJpanel.setPreferredSize(new Dimension(164,220));
+
         tipPanel = new TipPanel(gameCanvas);
-//        tipBar.add(next, BorderLayout.NORTH);
-//        tipBar.add(tipPanel, BorderLayout.SOUTH);
-//        tipBar.setBorder(border);
+        tipPanel.setBackground(null);
+        tipPanel.setOpaque(false);
+        tipPanel.setPreferredSize(new Dimension(164,170));
 
+        tipBar.add(emptyJpanel, BorderLayout.NORTH);
+        tipBar.add(tipPanel, BorderLayout.SOUTH);
 
-        toolBar = new JPanel(new GridLayout(3,1));
+        toolBar = new JPanel();
+//        new GridLayout(4,1)
 
         startButton = new JButton();
-//        icon_on_start.setImage(icon_on_start.getImage().getScaledInstance(166, 82, Image.SCALE_DEFAULT));
-
         startButton.setIcon(icon_on_start);
         // 去掉小框
         startButton.setUI(new BasicButtonUI());
         // 设置尺寸
-        startButton.setPreferredSize(new Dimension(166, 82));
+        startButton.setPreferredSize(new Dimension(118, 58));
         // 改透明度
         startButton.setContentAreaFilled(false);
         // 外边距
-        startButton.setMargin(new Insets(0, 0, 0, 0));
+        startButton.setMargin(new Insets(0, 23, 0, 23));
         // 去掉外边框
         startButton.setBorderPainted(false);
         startButton.setBorder(null);
@@ -65,9 +74,9 @@ public class ControlPanel extends JPanel {
         backButton = new JButton();
         backButton.setIcon(icon_on_back);
         backButton.setUI(new BasicButtonUI());
-        backButton.setPreferredSize(new Dimension(166, 82));
+        backButton.setPreferredSize(new Dimension(118, 58));
         backButton.setContentAreaFilled(false);
-        backButton.setMargin(new Insets(0, 4, 0, 0));
+        backButton.setMargin(new Insets(0, 23, 0, 23));
         backButton.setBorderPainted(false);
         backButton.setBorder(null);
 
@@ -75,21 +84,29 @@ public class ControlPanel extends JPanel {
         restartButton = new JButton();
         restartButton.setIcon(icon_on_restart);
         restartButton.setUI(new BasicButtonUI());
-        restartButton.setPreferredSize(new Dimension(166, 82));
+        restartButton.setPreferredSize(new Dimension(118, 58));
         restartButton.setContentAreaFilled(false);
-        restartButton.setMargin(new Insets(0, 4, 0, 0));
+        restartButton.setMargin(new Insets(0, 23, 0, 23));
         restartButton.setBorderPainted(false);
         restartButton.setBorder(null);
 
+        emptyButton_three = new JButton();
+        emptyButton_three.setPreferredSize(new Dimension(118, 58));
+        emptyButton_three.setContentAreaFilled(false);
+        emptyButton_three.setMargin(new Insets(0, 0, 0, 0));
+        emptyButton_three.setBorderPainted(false);
+        emptyButton_three.setBorder(null);
 
         toolBar.add(startButton);
         toolBar.add(backButton);
         toolBar.add(restartButton);
+        toolBar.add(emptyButton_three);
 
         myItemListener = new MyItemListener();
         startButton.addActionListener(myItemListener);
         backButton.addActionListener(myItemListener);
         restartButton.addActionListener(myItemListener);
+
 
         tipBar.setBackground(null);
         tipBar.setOpaque(false);
@@ -97,10 +114,7 @@ public class ControlPanel extends JPanel {
         toolBar.setOpaque(false);
         add(tipBar, BorderLayout.NORTH);
         add(toolBar, BorderLayout.SOUTH);
-//        this.setBorder(border);
-//         this.setSize(170,962);
-
-//        repaint();
+        // repaint();
     }
 
     public void paintComponent(Graphics g) {

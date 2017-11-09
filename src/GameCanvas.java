@@ -12,11 +12,13 @@ public class GameCanvas extends JPanel implements MouseListener {
     public static final int ROWS = 15;//棋盘行数
     public static final int COLS = 15;//棋盘列数
 
+    boolean isBlack = true;             //黑棋先手
+    public static int chessCount = 0;   // 棋盘上棋子的个数
+    private int xIndex;                 // 最后一枚棋子的横坐标
+    private int yIndex;                 // 最后一枚棋子的纵坐标
+    private Color colorChess; // 棋子的颜色
     ChessPoint[] chessPoints = new ChessPoint[(ROWS) * (COLS)]; // 15*15个交点 15*15个棋子
-    boolean isBlack = true; //黑棋先手
-    public static int chessCount = 0; // 棋盘上棋子的个数
-    private int xIndex, yIndex; // 最后一枚棋子的坐标
-    private Color colorTemp; // 棋子的颜色
+
 
     private Image img;
 
@@ -33,47 +35,54 @@ public class GameCanvas extends JPanel implements MouseListener {
 
             @Override
             public void mouseMoved(MouseEvent e) {
-                int x = (e.getX() - MARGIN_LEFT + GRID_SPAN / 2) / GRID_SPAN;
-                int y = (e.getY() - MARGIN_TOP + GRID_SPAN / 2) / GRID_SPAN;
-                if (xIndex < 0 || xIndex > ROWS || yIndex < 0 || yIndex > 0) {
+                // 鼠标变换 指针和小手的变换
+                int xIndex = (e.getX() - MARGIN_LEFT + GRID_SPAN / 2) / GRID_SPAN;
+                int yIndex = (e.getY() - MARGIN_TOP + GRID_SPAN / 2) / GRID_SPAN;
+
+                if (xIndex < 0 || xIndex > ROWS || yIndex < 0 || yIndex > COLS || isExistChess(xIndex,yIndex)) {
                     setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                } else setCursor(new Cursor(Cursor.HAND_CURSOR));
+                }
+                else {
+                    setCursor(new Cursor(Cursor.HAND_CURSOR));
+                }
             }
         });
     }
 
 
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);//画棋盘
+        super.paintComponent(g);
 
         g.drawImage(img, 0, 0, this); //画背景图
 
         // 画棋盘
-        for (int i = 0; i < ROWS; i++) {//画横线
+        for (int i = 0; i < ROWS; i++) {
+            //画横线 g.drawLine(x1,y1,x2,y2)
             g.drawLine(MARGIN_LEFT, MARGIN_TOP + i * GRID_SPAN, MARGIN_LEFT + (COLS-1) * GRID_SPAN, MARGIN_TOP + i * GRID_SPAN);
         }
-        for (int i = 0; i < COLS; i++) {//画竖线
+        for (int i = 0; i < COLS; i++) {
+            //画竖线
             g.drawLine(MARGIN_LEFT + i * GRID_SPAN, MARGIN_TOP, MARGIN_LEFT + i * GRID_SPAN, MARGIN_TOP + (ROWS-1) * GRID_SPAN);
         }
 
         // 画棋子
         for (int i = 0; i < chessCount; i++) {
             // 交叉点的坐标
-            int xPos = chessPoints[i].getX() * GRID_SPAN + MARGIN_LEFT; // x
-            int yPos = chessPoints[i].getY() * GRID_SPAN + MARGIN_TOP; // y
+            int xPosition = chessPoints[i].getX() * GRID_SPAN + MARGIN_LEFT; // x
+            int yPosition = chessPoints[i].getY() * GRID_SPAN + MARGIN_TOP; // y
             RadialGradientPaint paint;
             Graphics2D g2D = (Graphics2D) g;
-            colorTemp = chessPoints[i].getColor();
-            if (colorTemp == Color.BLACK) {
-                paint = new RadialGradientPaint(xPos - ChessPoint.DIAMETER / 2 + 25, yPos - ChessPoint.DIAMETER / 2 + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
+            colorChess = chessPoints[i].getColor();
+            if (colorChess == Color.BLACK) {
+                paint = new RadialGradientPaint(xPosition - ChessPoint.DIAMETER / 2 + 25, yPosition - ChessPoint.DIAMETER / 2 + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
                 g2D.setPaint(paint);
             }
-            if (colorTemp == Color.WHITE) {
-                paint = new RadialGradientPaint(xPos - ChessPoint.DIAMETER / 2 + 25, yPos - ChessPoint.DIAMETER / 2 + 10, 70, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
+            if (colorChess == Color.WHITE) {
+                paint = new RadialGradientPaint(xPosition - ChessPoint.DIAMETER / 2 + 25, yPosition - ChessPoint.DIAMETER / 2 + 10, 70, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
                 g2D.setPaint(paint);
             }
 
-            Ellipse2D e2D = new Ellipse2D.Float(xPos - ChessPoint.DIAMETER / 2, yPos - ChessPoint.DIAMETER / 2, 35, 35); // 圆形
+            Ellipse2D e2D = new Ellipse2D.Float(xPosition - ChessPoint.DIAMETER / 2, yPosition - ChessPoint.DIAMETER / 2, 35, 35); // 圆形
             g2D.fill(e2D);
         }
     }
