@@ -70,6 +70,12 @@ public class ControlPanel extends JPanel {
         startButton.setBorderPainted(false);
         startButton.setBorder(null);
 
+        emptyButton_one = new JButton();
+        emptyButton_one.setPreferredSize(new Dimension(118, 20));
+        emptyButton_one.setContentAreaFilled(false);
+        emptyButton_one.setMargin(new Insets(0, 0, 0, 0));
+        emptyButton_one.setBorderPainted(false);
+        emptyButton_one.setBorder(null);
 
         backButton = new JButton();
         backButton.setIcon(icon_on_back);
@@ -80,6 +86,12 @@ public class ControlPanel extends JPanel {
         backButton.setBorderPainted(false);
         backButton.setBorder(null);
 
+        emptyButton_two = new JButton();
+        emptyButton_two.setPreferredSize(new Dimension(118, 20));
+        emptyButton_two.setContentAreaFilled(false);
+        emptyButton_two.setMargin(new Insets(0, 0, 0, 0));
+        emptyButton_two.setBorderPainted(false);
+        emptyButton_two.setBorder(null);
 
         restartButton = new JButton();
         restartButton.setIcon(icon_on_restart);
@@ -91,14 +103,16 @@ public class ControlPanel extends JPanel {
         restartButton.setBorder(null);
 
         emptyButton_three = new JButton();
-        emptyButton_three.setPreferredSize(new Dimension(118, 58));
+        emptyButton_three.setPreferredSize(new Dimension(118, 20));
         emptyButton_three.setContentAreaFilled(false);
         emptyButton_three.setMargin(new Insets(0, 0, 0, 0));
         emptyButton_three.setBorderPainted(false);
         emptyButton_three.setBorder(null);
 
         toolBar.add(startButton);
+        toolBar.add(emptyButton_one);
         toolBar.add(backButton);
+        toolBar.add(emptyButton_two);
         toolBar.add(restartButton);
         toolBar.add(emptyButton_three);
 

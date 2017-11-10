@@ -103,9 +103,10 @@ public class GameCanvas extends JPanel implements MouseListener {
         yIndex = (e.getY() - MARGIN_TOP + GRID_SPAN / 2) / GRID_SPAN;
 
         // 超出行和列的范围就不能下
-        if (xIndex < 0 || xIndex > ROWS-1 || yIndex < 0 || yIndex > COLS-1) {
+        if (xIndex < 0 || xIndex > ROWS - 1 || yIndex < 0 || yIndex > COLS - 1) {
             return;
         }
+
         System.out.println("点击 (" + xIndex + "\t, " + yIndex + ")");
         // TODO
         // 已经有棋子的地方也不能下
@@ -121,6 +122,7 @@ public class GameCanvas extends JPanel implements MouseListener {
 
         // TODO
         // 如果赢了就弹出提示信息
+        isWin();
 
         // 交换落子方
         isBlack = !isBlack;
@@ -162,9 +164,39 @@ public class GameCanvas extends JPanel implements MouseListener {
         return false;
     }
 
-    //
+    // 判断这个坐标是否存在同一颜色的棋子
+    // 存在返回 true
+    // 不存在返回 false
+    private ChessPoint getChess(int x, int y, Color color){
+        for (int i = 0; i < chessPoints.length; i++) {
+            if (chessPoints[i] != null && chessPoints[i].getX() == x
+                    && chessPoints[i].getY() == y && chessPoints[i].getColor() == color) {
+                return chessPoints[i];
+            }
+        }
+        return null;
+    }
+
+
     private boolean isWin() {
-        return true;
+        System.out.println(xIndex);
+        System.out.println(yIndex);
+
+        int xPosition; // 临时变量 x的位置
+        int yPosition; // 临时变量 y的位置
+        int count = 1; //连续棋子的个数
+
+
+        // 向左寻找
+        for (xPosition = xIndex - 1; xPosition >= 0; xPosition--){
+            Color color = isBlack?Color.BLACK:Color.WHITE;
+            if (getChess(xPosition,yIndex, color) != null){
+                count++;
+            }
+        }
+
+
+        return false;
     }
 
     public void Back() {
