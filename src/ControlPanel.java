@@ -15,6 +15,7 @@ public class ControlPanel extends JPanel {
     MusicTread musicTread = new MusicTread("000");
     Thread thread =new Thread(musicTread);
 
+
 //    private Border border=new EtchedBorder(EtchedBorder.RAISED, Color.white, new Color(148,145,140));
 
     MyItemListener myItemListener;
@@ -28,14 +29,21 @@ public class ControlPanel extends JPanel {
     ImageIcon icon_press_restart = new ImageIcon("img/press_restart.png");
     ImageIcon icon_on_back = new ImageIcon("img/on_back.png");
     ImageIcon icon_press_back = new ImageIcon("img/press_back.png");
-    ImageIcon icon_on_sound = new ImageIcon("img/on_back.png");
-    ImageIcon icon_press_sound = new ImageIcon("img/press_back.png");
-    ImageIcon icon_on_music = new ImageIcon("img/on_back.png");
-    ImageIcon icon_press_music = new ImageIcon("img/press_back.png");
+    //音效按钮4张图片
+    ImageIcon icon_on_openSound = new ImageIcon("img/on_openSound.png");
+    ImageIcon icon_on_closeSound = new ImageIcon("img/on_closeSound.png");
+    ImageIcon icon_press_openSound = new ImageIcon("img/press_openSound.png");
+    ImageIcon icon_press_closeSound = new ImageIcon("img/press_closeSound.png");
+    //音乐按钮4张图片
+    ImageIcon icon_on_openMusic = new ImageIcon("img/on_openMusic.png");
+    ImageIcon icon_on_closeMusic = new ImageIcon("img/on_closeMusic.png");
+    ImageIcon icon_press_openMusic = new ImageIcon("img/press_openMusic.png");
+    ImageIcon icon_press_closeMusic = new ImageIcon("img/press_closeMusic.png");
 
 
     public ControlPanel(GameCanvas gameCanvas) throws IOException {
         this.setPreferredSize(new Dimension(164, 800));// 设置自身JPanel的大小
+        thread.start();
 
         img = Toolkit.getDefaultToolkit().getImage("img/ControlBoard.jpg"); // 获取背景图
 
@@ -122,7 +130,7 @@ public class ControlPanel extends JPanel {
         emptyButton_three.setBorder(null);
 
         soundMusic = new JButton();
-        soundMusic.setIcon(icon_on_sound);
+        soundMusic.setIcon(icon_on_closeSound);
         soundMusic.setUI(new BasicButtonUI());
         soundMusic.setPreferredSize(new Dimension(118, 58));
         soundMusic.setContentAreaFilled(false);
@@ -138,7 +146,7 @@ public class ControlPanel extends JPanel {
         emptyButton_four.setBorder(null);
 
         backMusic = new JButton();
-        backMusic.setIcon(icon_on_music);
+        backMusic.setIcon(icon_on_closeMusic);
         backMusic.setUI(new BasicButtonUI());
         backMusic.setPreferredSize(new Dimension(118, 58));
         backMusic.setContentAreaFilled(false);
@@ -223,17 +231,28 @@ public class ControlPanel extends JPanel {
             }else if (obj==soundMusic){
                 if (PlaySound.isPlaySound){
                     PlaySound.isPlaySound =false;
+                    soundMusic.setIcon(icon_press_closeSound);
                 }
-                else PlaySound.isPlaySound =true;
+                else {
+                    PlaySound.isPlaySound =true;
+                    soundMusic.setIcon(icon_press_openSound);
+                }
                 System.out.println(PlaySound.isPlaySound);
             }else if (obj==backMusic){
                 if (isPlayBackMusic){
-                    thread.start();
-                    isPlayBackMusic=false;
-                    System.out.println("kai");
+                    try {
+                        thread.wait();
+                        isPlayBackMusic=false;
+                        backMusic.setIcon(icon_press_openMusic);
+                        System.out.println("关闭音乐");
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+
                 }else {
-                    thread.stop();
-                    System.out.println("tin");
+                    thread.start();
+                    backMusic.setIcon(icon_press_closeMusic);
+                    System.out.println("打开音乐");
                 }
             }
 
@@ -265,6 +284,24 @@ public class ControlPanel extends JPanel {
                     e1.printStackTrace();
                 }
                 restartButton.setIcon(icon_on_restart);
+            }else if (obj==soundMusic){
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                if (PlaySound.isPlaySound)
+                    soundMusic.setIcon(icon_on_closeSound);
+                else soundMusic.setIcon(icon_on_openSound);
+            }else if (obj==backMusic){
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                if (isPlayBackMusic)
+                    backMusic.setIcon(icon_on_closeMusic);
+                else backMusic.setIcon(icon_on_openMusic);
             }
         }
 
