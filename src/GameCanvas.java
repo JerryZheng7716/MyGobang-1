@@ -70,23 +70,34 @@ public class GameCanvas extends JPanel implements MouseListener {
             // 交叉点的坐标
             int xPosition = chessPoints[i].getX() * GRID_SPAN + MARGIN_LEFT; // x
             int yPosition = chessPoints[i].getY() * GRID_SPAN + MARGIN_TOP; // y
+            int x = xPosition - ChessPoint.DIAMETER / 2;
+            int y = yPosition - ChessPoint.DIAMETER / 2;
+
             RadialGradientPaint paint;
             Graphics2D g2D = (Graphics2D) g;
             //让圆形变得更加精细
             g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
             colorChess = chessPoints[i].getColor();
             if (colorChess == Color.BLACK) {
-                paint = new RadialGradientPaint(xPosition - ChessPoint.DIAMETER / 2 + 25, yPosition - ChessPoint.DIAMETER / 2 + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
+                paint = new RadialGradientPaint(x + 25, y + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
                 g2D.setPaint(paint);
             }
             if (colorChess == Color.WHITE) {
-                paint = new RadialGradientPaint(xPosition - ChessPoint.DIAMETER / 2 + 25, yPosition - ChessPoint.DIAMETER / 2 + 10, 70, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
+                paint = new RadialGradientPaint(x + 25, y + 10, 70, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
                 g2D.setPaint(paint);
             }
-
-            Ellipse2D e2D = new Ellipse2D.Float(xPosition - ChessPoint.DIAMETER / 2, yPosition - ChessPoint.DIAMETER / 2, 35, 35); // 圆形
+            Ellipse2D e2D = new Ellipse2D.Float(x, y, 35, 35); // 圆形
             g2D.fill(e2D);
+            //设置最后一个子红色边框
+            if (i==chessCount-1){
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setColor(Color.red);
+                g2d.draw3DRect(x - 3, y - 3, 40, 40,true);
+            }
+
         }
+
     }
 
     // 调用鼠标单击事件

@@ -231,10 +231,12 @@ public class ControlPanel extends JPanel {
             }else if (obj==soundMusic){
                 if (PlaySound.isPlaySound){
                     PlaySound.isPlaySound =false;
+                    playSound.PlaySound("button");
                     soundMusic.setIcon(icon_press_closeSound);
                 }
                 else {
                     PlaySound.isPlaySound =true;
+                    playSound.PlaySound("button");
                     soundMusic.setIcon(icon_press_openSound);
                 }
                 System.out.println(PlaySound.isPlaySound);
@@ -307,12 +309,13 @@ public class ControlPanel extends JPanel {
 
         @Override
         public void mouseEntered(MouseEvent e) {
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-
+            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
     }
 
