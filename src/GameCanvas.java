@@ -56,14 +56,14 @@ public class GameCanvas extends JPanel implements MouseListener {
         g.drawImage(img, 0, 0, this); //画背景图
 
         // 画棋盘
-        for (int i = 0; i < ROWS; i++) {
-            //画横线 g.drawLine(x1,y1,x2,y2)
-            g.drawLine(MARGIN_LEFT, MARGIN_TOP + i * GRID_SPAN, MARGIN_LEFT + (COLS-1) * GRID_SPAN, MARGIN_TOP + i * GRID_SPAN);
-        }
-        for (int i = 0; i < COLS; i++) {
-            //画竖线
-            g.drawLine(MARGIN_LEFT + i * GRID_SPAN, MARGIN_TOP, MARGIN_LEFT + i * GRID_SPAN, MARGIN_TOP + (ROWS-1) * GRID_SPAN);
-        }
+//        for (int i = 0; i < ROWS; i++) {
+//            //画横线 g.drawLine(x1,y1,x2,y2)
+//            g.drawLine(MARGIN_LEFT, MARGIN_TOP + i * GRID_SPAN, MARGIN_LEFT + (COLS-1) * GRID_SPAN, MARGIN_TOP + i * GRID_SPAN);
+//        }
+//        for (int i = 0; i < COLS; i++) {
+//            //画竖线
+//            g.drawLine(MARGIN_LEFT + i * GRID_SPAN, MARGIN_TOP, MARGIN_LEFT + i * GRID_SPAN, MARGIN_TOP + (ROWS-1) * GRID_SPAN);
+//        }
 
         // 画棋子
         for (int i = 0; i < chessCount; i++) {
@@ -72,6 +72,8 @@ public class GameCanvas extends JPanel implements MouseListener {
             int yPosition = chessPoints[i].getY() * GRID_SPAN + MARGIN_TOP; // y
             RadialGradientPaint paint;
             Graphics2D g2D = (Graphics2D) g;
+            //让圆形变得更加精细
+            g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             colorChess = chessPoints[i].getColor();
             if (colorChess == Color.BLACK) {
                 paint = new RadialGradientPaint(xPosition - ChessPoint.DIAMETER / 2 + 25, yPosition - ChessPoint.DIAMETER / 2 + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
@@ -117,6 +119,8 @@ public class GameCanvas extends JPanel implements MouseListener {
         ChessPoint chessPoint = new ChessPoint(xIndex, yIndex, isBlack ? Color.BLACK : Color.WHITE);
         chessPoints[chessCount] = chessPoint;
         chessCount++;
+        PlaySound playSound =new PlaySound();
+        playSound.PlaySound("chess");
         // 重画面板
         repaint();
 

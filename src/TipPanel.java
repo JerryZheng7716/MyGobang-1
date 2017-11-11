@@ -53,16 +53,18 @@ public class TipPanel extends JPanel{
 //        g.drawLine(45,10,45,45); // 第二条竖线
         RadialGradientPaint paint;
         Graphics2D g2D = (Graphics2D) g;
+        //让圆形变得更加精细
+        g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (isBlack == true) {
-            paint = new RadialGradientPaint(40 - ChessPoint.DIAMETER / 2 + 25, 40 - ChessPoint.DIAMETER / 2 + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
+            paint = new RadialGradientPaint(85 - ChessPoint.DIAMETER / 2 + 25, 40 - ChessPoint.DIAMETER / 2 + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
             g2D.setPaint(paint);
         }
         if (isBlack == false) {
-            paint = new RadialGradientPaint(40 - ChessPoint.DIAMETER / 2 + 25, 40 - ChessPoint.DIAMETER / 2 + 10, 70, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
+            paint = new RadialGradientPaint(85 - ChessPoint.DIAMETER / 2 + 25, 40 - ChessPoint.DIAMETER / 2 + 10, 70, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
             g2D.setPaint(paint);
         }
 
-        Ellipse2D e2D = new Ellipse2D.Float(40 - ChessPoint.DIAMETER / 2, 40 - ChessPoint.DIAMETER / 2, 35, 35); // 圆形
+        Ellipse2D e2D = new Ellipse2D.Float(85 - ChessPoint.DIAMETER / 2, 40 - ChessPoint.DIAMETER / 2, 35, 35); // 圆形
         g2D.fill(e2D);
 
     }

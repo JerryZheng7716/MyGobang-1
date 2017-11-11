@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 // 主类
 public class GobangGame extends JFrame {
@@ -7,7 +8,8 @@ public class GobangGame extends JFrame {
     private GameCanvas gameCanvas;     // 右侧游戏场景
     private GameMenu gameMenu;         // 上方游戏菜单
 
-    public GobangGame(){
+
+    public GobangGame() throws IOException {
 
         gameCanvas = new GameCanvas();
         gameMenu = new GameMenu(gameCanvas);
@@ -35,8 +37,10 @@ public class GobangGame extends JFrame {
     }
 
     // 主函数
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         GobangGame gobangGame = new GobangGame();
         gobangGame.setVisible(true);
+
+
     }
 }
