@@ -9,7 +9,7 @@ public class TipPanel extends JPanel{
     private Color BlackChessColor = Color.BLACK;
     private Color BackgroudColor = Color.yellow;
     private GameCanvas gameCanvas;
-    boolean isBlack = true;             //黑棋先手
+    boolean isBlack = false;             //黑棋先手
 
     // 棋子
     private ChessPoint chessPoint = new ChessPoint();
@@ -17,6 +17,10 @@ public class TipPanel extends JPanel{
     private boolean isTiped = false;
     // 获取长宽
     private int boxWidth, boxHeight;
+
+    public TipPanel() {
+
+    }
 
     public void setWhichChess(ChessPoint chessPoint){
         this.chessPoint = chessPoint;
@@ -55,11 +59,11 @@ public class TipPanel extends JPanel{
         Graphics2D g2D = (Graphics2D) g;
         //让圆形变得更加精细
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        if (isBlack == true) {
+        if (isBlack == false) {
             paint = new RadialGradientPaint(85 - ChessPoint.DIAMETER / 2 + 25, 40 - ChessPoint.DIAMETER / 2 + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
             g2D.setPaint(paint);
         }
-        if (isBlack == false) {
+        if (isBlack == true) {
             paint = new RadialGradientPaint(85 - ChessPoint.DIAMETER / 2 + 25, 40 - ChessPoint.DIAMETER / 2 + 10, 70, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
             g2D.setPaint(paint);
         }
@@ -67,5 +71,11 @@ public class TipPanel extends JPanel{
         Ellipse2D e2D = new Ellipse2D.Float(85 - ChessPoint.DIAMETER / 2, 40 - ChessPoint.DIAMETER / 2, 35, 35); // 圆形
         g2D.fill(e2D);
 
+    }
+
+    public void paintChess(boolean isBlack){
+        this.isBlack = isBlack;
+        System.out.println(this.isBlack);
+        repaint();
     }
 }

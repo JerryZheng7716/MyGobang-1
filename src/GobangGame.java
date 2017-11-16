@@ -1,19 +1,19 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 // 主类
 public class GobangGame extends JFrame {
     private ControlPanel controlPanel; // 左侧控制面板
     private GameCanvas gameCanvas;     // 右侧游戏场景
     private GameMenu gameMenu;         // 上方游戏菜单
+    private TipPanel tipPanel;         // 提示面板
 
-
-    public GobangGame() throws IOException {
-
+    public GobangGame(){
         gameCanvas = new GameCanvas();
         gameMenu = new GameMenu(gameCanvas);
         controlPanel = new ControlPanel(gameCanvas);
+        gameCanvas.setControlPanel(controlPanel);
+
 
         // 将游戏场景 控制面板 菜单加进窗口
         this.add(gameCanvas, BorderLayout.CENTER);
@@ -37,10 +37,8 @@ public class GobangGame extends JFrame {
     }
 
     // 主函数
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         GobangGame gobangGame = new GobangGame();
         gobangGame.setVisible(true);
-
-
     }
 }

@@ -15,7 +15,6 @@ public class ControlPanel extends JPanel {
     MusicTread musicTread = new MusicTread("000");
     Thread thread =new Thread(musicTread);
 
-
 //    private Border border=new EtchedBorder(EtchedBorder.RAISED, Color.white, new Color(148,145,140));
 
     MyItemListener myItemListener;
@@ -29,19 +28,19 @@ public class ControlPanel extends JPanel {
     ImageIcon icon_press_restart = new ImageIcon("img/press_restart.png");
     ImageIcon icon_on_back = new ImageIcon("img/on_back.png");
     ImageIcon icon_press_back = new ImageIcon("img/press_back.png");
-    //音效按钮4张图片
+    // 音效按钮4张图片
     ImageIcon icon_on_openSound = new ImageIcon("img/on_openSound.png");
     ImageIcon icon_on_closeSound = new ImageIcon("img/on_closeSound.png");
     ImageIcon icon_press_openSound = new ImageIcon("img/press_openSound.png");
     ImageIcon icon_press_closeSound = new ImageIcon("img/press_closeSound.png");
-    //音乐按钮4张图片
+    // 音乐按钮4张图片
     ImageIcon icon_on_openMusic = new ImageIcon("img/on_openMusic.png");
     ImageIcon icon_on_closeMusic = new ImageIcon("img/on_closeMusic.png");
     ImageIcon icon_press_openMusic = new ImageIcon("img/press_openMusic.png");
     ImageIcon icon_press_closeMusic = new ImageIcon("img/press_closeMusic.png");
 
 
-    public ControlPanel(GameCanvas gameCanvas) throws IOException {
+    public ControlPanel(GameCanvas gameCanvas) {
         this.setPreferredSize(new Dimension(164, 800));// 设置自身JPanel的大小
         thread.start();
 
@@ -213,6 +212,7 @@ public class ControlPanel extends JPanel {
                 playSound.PlaySound("button");
                 System.out.println("开始游戏");
                 startButton.setIcon(icon_press_start);
+                gameCanvas.Start();
                 // restartGame();
             }
             else if (obj==backButton){
@@ -317,6 +317,11 @@ public class ControlPanel extends JPanel {
         public void mouseExited(MouseEvent e) {
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         }
+    }
+
+    // 调用tipPanel下的paintChess()
+    public void paintTipChess(boolean isBlack) {
+        tipPanel.paintChess(isBlack);
     }
 
 }
