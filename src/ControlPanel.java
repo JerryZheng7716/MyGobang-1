@@ -1,19 +1,17 @@
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 
 // 控制面板
 public class ControlPanel extends JPanel {
     private JPanel emptyJpanel;
-    private JPanel toolBar,tipBar;
-    private JButton startButton, backButton, restartButton,soundMusic,backMusic;
-    private JButton emptyButton_one, emptyButton_two, emptyButton_three,emptyButton_four, emptyButton_five;
+    private JPanel toolBar, tipBar;
+    private JButton startButton, backButton, restartButton, soundMusic, backMusic;
+    private JButton emptyButton_one, emptyButton_two, emptyButton_three, emptyButton_four, emptyButton_five;
     private TipPanel tipPanel;
-    public static boolean isPlayBackMusic=true;
-    MusicTread musicTread = new MusicTread("000");
-    Thread thread =new Thread(musicTread);
+    public static boolean isPlayBackMusic = true;
 
 //    private Border border=new EtchedBorder(EtchedBorder.RAISED, Color.white, new Color(148,145,140));
 
@@ -21,6 +19,9 @@ public class ControlPanel extends JPanel {
 
     private GameCanvas gameCanvas;
     private Image img;
+    java.net.URL file1 = getClass().getResource("back_Music.wav");
+    AudioClip sound1 = java.applet.Applet.newAudioClip(file1);
+
 
     ImageIcon icon_on_start = new ImageIcon("img/on_start.png");
     ImageIcon icon_press_start = new ImageIcon("img/press_start.png");
@@ -41,8 +42,8 @@ public class ControlPanel extends JPanel {
 
 
     public ControlPanel(GameCanvas gameCanvas) {
+
         this.setPreferredSize(new Dimension(164, 800));// 设置自身JPanel的大小
-        thread.start();
 
         img = Toolkit.getDefaultToolkit().getImage("img/ControlBoard.jpg"); // 获取背景图
 
@@ -51,28 +52,27 @@ public class ControlPanel extends JPanel {
         //this.setLayout(new GridLayout(2,1));
 
         tipBar = new JPanel();
-        tipBar.setPreferredSize(new Dimension(164,300));
+        tipBar.setPreferredSize(new Dimension(164, 300));
 
         emptyJpanel = new JPanel();
         emptyJpanel.setBackground(null);
         emptyJpanel.setOpaque(false);
-        emptyJpanel.setPreferredSize(new Dimension(164,200));
+        emptyJpanel.setPreferredSize(new Dimension(164, 200));
 
         tipPanel = new TipPanel(gameCanvas);
         tipPanel.setBackground(null);
         tipPanel.setOpaque(false);
-        tipPanel.setPreferredSize(new Dimension(164,100));
+        tipPanel.setPreferredSize(new Dimension(164, 100));
 
         tipBar.add(emptyJpanel, BorderLayout.NORTH);
         tipBar.add(tipPanel, BorderLayout.SOUTH);
 
         toolBar = new JPanel();
 //        new GridLayout(4,1)
-        toolBar.setPreferredSize(new Dimension(164,480));
+        toolBar.setPreferredSize(new Dimension(164, 480));
         //加入边框便于调试
 //        toolBar.setBorder(BorderFactory.createLineBorder(Color.red));
 //        tipBar.setBorder(BorderFactory.createLineBorder(Color.red));
-
 
 
         startButton = new JButton();
@@ -145,7 +145,7 @@ public class ControlPanel extends JPanel {
         emptyButton_four.setBorder(null);
 
         backMusic = new JButton();
-        backMusic.setIcon(icon_on_closeMusic);
+        backMusic.setIcon(icon_on_openMusic);
         backMusic.setUI(new BasicButtonUI());
         backMusic.setPreferredSize(new Dimension(118, 58));
         backMusic.setContentAreaFilled(false);
@@ -154,14 +154,13 @@ public class ControlPanel extends JPanel {
         backMusic.setBorder(null);
 
         emptyButton_five = new JButton();
-        emptyButton_five.setPreferredSize(new Dimension(118, 20));
+        emptyButton_five.setPreferredSize(new Dimension(118, 80));
         emptyButton_five.setContentAreaFilled(false);
         emptyButton_five.setMargin(new Insets(0, 0, 0, 0));
         emptyButton_five.setBorderPainted(false);
         emptyButton_five.setBorder(null);
-
         toolBar.add(emptyButton_five);
-        toolBar.add(startButton);
+//        toolBar.add(startButton);
         toolBar.add(emptyButton_one);
         toolBar.add(backButton);
         toolBar.add(emptyButton_two);
@@ -170,8 +169,6 @@ public class ControlPanel extends JPanel {
         toolBar.add(soundMusic);
         toolBar.add(emptyButton_four);
         toolBar.add(backMusic);
-
-
 
 
         myItemListener = new MyItemListener();
@@ -197,8 +194,9 @@ public class ControlPanel extends JPanel {
         g.drawImage(img, 0, 0, this); //画背景图
     }
 
-    private class MyItemListener implements MouseListener{
-        PlaySound playSound=new PlaySound();
+    private class MyItemListener implements MouseListener {
+        PlaySound playSound = new PlaySound();
+
         @Override
         public void mouseClicked(MouseEvent e) {
 
@@ -206,55 +204,51 @@ public class ControlPanel extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            Object obj=e.getSource();//获得事件源
-            if(obj==startButton){
+
+            Object obj = e.getSource();//获得事件源
+            if (obj == startButton) {
                 // 开始游戏
                 playSound.PlaySound("button");
                 System.out.println("开始游戏");
                 startButton.setIcon(icon_press_start);
                 gameCanvas.Start();
                 // restartGame();
-            }
-            else if (obj==backButton){
+            } else if (obj == backButton) {
                 // 悔棋
                 playSound.PlaySound("button");
                 System.out.println("悔棋");
                 gameCanvas.Back();
                 backButton.setIcon(icon_press_back);
-            }
-            else if (obj==restartButton){
+            } else if (obj == restartButton) {
                 // 重新开始
                 playSound.PlaySound("button");
                 System.out.println("重新开始");
                 gameCanvas.restartGame();
                 restartButton.setIcon(icon_press_restart);
-            }else if (obj==soundMusic){
-                if (PlaySound.isPlaySound){
-                    PlaySound.isPlaySound =false;
+            } else if (obj == soundMusic) {
+                if (PlaySound.isPlaySound) {
+                    PlaySound.isPlaySound = false;
                     playSound.PlaySound("button");
                     soundMusic.setIcon(icon_press_closeSound);
-                }
-                else {
-                    PlaySound.isPlaySound =true;
+                } else {
+                    PlaySound.isPlaySound = true;
                     playSound.PlaySound("button");
                     soundMusic.setIcon(icon_press_openSound);
                 }
                 System.out.println(PlaySound.isPlaySound);
-            }else if (obj==backMusic){
-                if (isPlayBackMusic){
-                    try {
-                        thread.wait();
-                        isPlayBackMusic=false;
-                        backMusic.setIcon(icon_press_openMusic);
-                        System.out.println("关闭音乐");
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
+            } else if (obj == backMusic) {
+                if (isPlayBackMusic) {
+                    sound1.play();
+                    sound1.loop();
+                    backMusic.setIcon(icon_press_openMusic);
+                    System.out.println("关闭音乐");
+                    isPlayBackMusic = false;
 
-                }else {
-                    thread.start();
-                    backMusic.setIcon(icon_press_closeMusic);
+                } else {
+                    sound1.stop();
                     System.out.println("打开音乐");
+                    backMusic.setIcon(icon_press_closeMusic);
+                    isPlayBackMusic = true;
                 }
             }
 
@@ -262,31 +256,29 @@ public class ControlPanel extends JPanel {
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            Object obj=e.getSource();//获得事件源
-            if(obj==startButton){
+            Object obj = e.getSource();//获得事件源
+            if (obj == startButton) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
                 startButton.setIcon(icon_on_start);
-            }
-            else if (obj==backButton){
+            } else if (obj == backButton) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
                 backButton.setIcon(icon_on_back);
-            }
-            else if (obj==restartButton){
+            } else if (obj == restartButton) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
                 restartButton.setIcon(icon_on_restart);
-            }else if (obj==soundMusic){
+            } else if (obj == soundMusic) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e1) {
@@ -295,15 +287,15 @@ public class ControlPanel extends JPanel {
                 if (PlaySound.isPlaySound)
                     soundMusic.setIcon(icon_on_closeSound);
                 else soundMusic.setIcon(icon_on_openSound);
-            }else if (obj==backMusic){
+            } else if (obj == backMusic) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
                 if (isPlayBackMusic)
-                    backMusic.setIcon(icon_on_closeMusic);
-                else backMusic.setIcon(icon_on_openMusic);
+                    backMusic.setIcon(icon_on_openMusic);
+                else backMusic.setIcon(icon_on_closeMusic);
             }
         }
 
@@ -323,5 +315,6 @@ public class ControlPanel extends JPanel {
     public void paintTipChess(boolean isBlack) {
         tipPanel.paintChess(isBlack);
     }
+
 
 }

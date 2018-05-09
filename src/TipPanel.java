@@ -9,7 +9,7 @@ public class TipPanel extends JPanel{
     private Color BlackChessColor = Color.BLACK;
     private Color BackgroudColor = Color.yellow;
     private GameCanvas gameCanvas;
-    boolean isBlack = false;             //黑棋先手
+    public static boolean isBlack = false;             //黑棋先手
 
     // 棋子
     private ChessPoint chessPoint = new ChessPoint();

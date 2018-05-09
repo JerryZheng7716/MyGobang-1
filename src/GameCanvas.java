@@ -169,7 +169,7 @@
 //
 //
 //        // 如果赢了就弹出提示信息
-//        if (isWin()){
+//        if (is成五()){
 //            JOptionPane.showMessageDialog(this, "恭喜 " + colorName + " 赢了");
 //            isGameOver = true;
 //        }
@@ -244,7 +244,7 @@
 //    }
 //
 //
-//    private boolean isWin() {
+//    private boolean is成五() {
 ////        System.out.println(xIndex);
 ////        System.out.println(yIndex);
 //
@@ -427,6 +427,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
+import java.lang.*;
 
 // 游戏场景
 public class GameCanvas extends JPanel implements MouseListener {
@@ -437,17 +438,20 @@ public class GameCanvas extends JPanel implements MouseListener {
     public static final int ROWS = 15;  // 棋盘行数
     public static final int COLS = 15;  // 棋盘列数
     public static int chessCount = 0;   // 棋盘上棋子的个数
-    public boolean isBlack = true;             // 黑棋先手
+    public static boolean isBlack = true;             // 黑棋先手
     public static boolean isGameOver = false;         // 游戏是否结束
     ChessPoint[] chessPoints = new ChessPoint[(ROWS) * (COLS)]; // 15*15个交点 15*15个棋子
     public static int chessSize = 35;
-    private int xIndex;                 // 最后一枚棋子的横坐标
-    private int yIndex;                 // 最后一枚棋子的纵坐标
+    public static int xIndex;                 // 最后一枚棋子的横坐标
+    public static int yIndex;                 // 最后一枚棋子的纵坐标
     private Color colorChess;           // 棋子的颜色
     private Image img;                  // 场景背景图
     ControlPanel controlPanel;          // 定义控制面，调用paintTipChess()
-
-
+    AiTread aiTread = new AiTread(this);
+    public static boolean isAistop = true;
+    public int testX1 = 0, testY1 = 0, testX2 = 0, testY2 = 0, testX3 = 0, testY3 = 0, testX4 = 0, testY4 = 0;
+    boolean isAi = true;
+    boolean aiIsBlack=true;
     // 构造方法
     public GameCanvas() {
         // 设置背景图片
@@ -457,7 +461,6 @@ public class GameCanvas extends JPanel implements MouseListener {
         int imageWidth = img.getWidth(this);
         int imageHeight = img.getHeight(this);
         this.setPreferredSize(new Dimension(imageWidth, imageHeight));
-
         addMouseListener(this);
         addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -478,6 +481,11 @@ public class GameCanvas extends JPanel implements MouseListener {
                 }
             }
         });
+        if (isAi&&aiIsBlack) {
+            Thread thread = new Thread(aiTread);//启动AI
+            thread.start();
+            isBlack=!isBlack;
+        }
     }
 
     // 防止主方法内互相调用导致空指针，重新建立set方法
@@ -491,25 +499,43 @@ public class GameCanvas extends JPanel implements MouseListener {
             controlPanel.paintTipChess(false);
             return;
         }
-        controlPanel.paintTipChess(isBlack);
+        if (isAistop) {
+            if (chessCount % 2 == 1) {
+                controlPanel.paintTipChess(false);
+            } else {
+                controlPanel.paintTipChess(true);
+            }
+        } else {
+            if (chessCount % 2 == 0) {
+                controlPanel.paintTipChess(false);
+            } else {
+                controlPanel.paintTipChess(true);
+            }
+        }
+    }
+
+    public void paint(Graphics g) {
+        super.paint(g);
+        if (isAi){
+            RadialGradientPaint paint1;
+            paint1 = new RadialGradientPaint(50, 50, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.RED, Color.RED});
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setPaint(paint1);
+            Ellipse2D e2D1 = new Ellipse2D.Float(testX1 * GRID_SPAN + MARGIN_LEFT - 8, testY1 * GRID_SPAN + MARGIN_TOP - 8, 10, 10); // 圆形
+            Ellipse2D e2D2 = new Ellipse2D.Float(testX2 * GRID_SPAN + MARGIN_LEFT - 8, testY2 * GRID_SPAN + MARGIN_TOP - 8, 10, 10); // 圆形
+            Ellipse2D e2D3 = new Ellipse2D.Float(testX3 * GRID_SPAN + MARGIN_LEFT - 8, testY3 * GRID_SPAN + MARGIN_TOP - 8, 10, 10); // 圆形
+            Ellipse2D e2D4 = new Ellipse2D.Float(testX4 * GRID_SPAN + MARGIN_LEFT - 8, testY4 * GRID_SPAN + MARGIN_TOP - 8, 10, 10); // 圆形
+            g2d.fill(e2D1);
+            g2d.fill(e2D2);
+            g2d.fill(e2D3);
+            g2d.fill(e2D4);
+        }
     }
 
     // 棋盘和棋子
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         g.drawImage(img, 0, 0, this); // 画背景图
-
-//        // 画棋盘
-//        for (int i = 0; i < ROWS; i++) {
-//            //画横线 g.drawLine(x1,y1,x2,y2)
-//            g.drawLine(MARGIN_LEFT, MARGIN_TOP + i * GRID_SPAN, MARGIN_LEFT + (COLS - 1) * GRID_SPAN, MARGIN_TOP + i * GRID_SPAN);
-//        }
-//        for (int i = 0; i < COLS; i++) {
-//            //画竖线
-//            g.drawLine(MARGIN_LEFT + i * GRID_SPAN, MARGIN_TOP, MARGIN_LEFT + i * GRID_SPAN, MARGIN_TOP + (ROWS - 1) * GRID_SPAN);
-//        }
-
         // 画棋子
         for (int i = 0; i < chessCount; i++) {
             // 交叉点的坐标
@@ -527,27 +553,53 @@ public class GameCanvas extends JPanel implements MouseListener {
 
             colorChess = chessPoints[i].getColor();
             if (colorChess == Color.BLACK) {
-                paint = new RadialGradientPaint(xPosition - ChessPoint.DIAMETER / 2 + 25, yPosition - ChessPoint.DIAMETER / 2 + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
+                paint = new RadialGradientPaint(xPosition - ChessPoint.DIAMETER / 2 + 25, yPosition - ChessPoint.DIAMETER / 2 + 10, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.GRAY, Color.BLACK});
                 g2D.setPaint(paint);
             }
             if (colorChess == Color.WHITE) {
                 paint = new RadialGradientPaint(xPosition - ChessPoint.DIAMETER / 2 + 25, yPosition - ChessPoint.DIAMETER / 2 + 10, 70, new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, Color.BLACK});
                 g2D.setPaint(paint);
             }
-
             Ellipse2D e2D = new Ellipse2D.Float(xPosition - ChessPoint.DIAMETER / 2, yPosition - ChessPoint.DIAMETER / 2, chessSize, chessSize); // 圆形
             g2D.fill(e2D);
-
-            //设置最后一个子红色边框
+            //设置最后一个子红色圆点
             if (i == chessCount - 1) {
+                RadialGradientPaint paint1;
+                paint1 = new RadialGradientPaint(xBox, yBox, 20, new float[]{0.0f, 1.0f}, new Color[]{Color.RED, Color.RED});
                 Graphics2D g2d = (Graphics2D) g;
-                g2d.setColor(Color.red);
-                g2d.draw3DRect(xBox, yBox, chessSize, chessSize, true);
+                g2d.setPaint(paint1);
+                Ellipse2D e2D1 = new Ellipse2D.Float(xBox + 10, yBox + 10, 15, 15); // 圆形
+                g2d.fill(e2D1);
             }
 
-        }
+            //设置最后一个子红色圆点
 
+            String value = "0";
+            value = String.valueOf(i);
+            Font font = new Font("微软雅黑", Font.BOLD, 14); // 创建字体对象
+            Graphics graphicsText = (Graphics) g;
+            graphicsText.setFont(font); // 设置字体
+            Color color = new Color(255, 255, 255);
+            if (i % 2 == 0) {
+                color = new Color(255, 255, 255);
+            } else {
+                color = new Color(0, 0, 0);
+            }
+            graphicsText.setColor(color);
+            if (i < 10) {
+                graphicsText.drawString(value, xBox + 13, yBox + 23); // 绘制文本
+            } else if (i < 100) {
+                graphicsText.drawString(value, xBox + 8, yBox + 23); // 绘制文本
+            } else {
+                graphicsText.drawString(value, xBox + 3, yBox + 23); // 绘制文本
+            }
+            if (i == 224) {
+                JOptionPane.showMessageDialog(null, "噢，我的天，瞧瞧这个优秀的对局，我亲爱的上帝，\n这是汤姆斯·陈独秀先生的奖杯，是谁把它拿到这儿来的。\n来，我亲爱的汤姆斯，这是你的，摸它之前记得用蒂花之秀洗手液，\n这会让您显得庄重一些，如果您觉得不够，还可以来个橘子.", "我的天呐！和棋了！", JOptionPane.INFORMATION_MESSAGE);
+                isGameOver = true;
+            }
+        }
     }
+
 
     // 调用鼠标单击事件
     // 将坐标转化为索引
@@ -556,94 +608,55 @@ public class GameCanvas extends JPanel implements MouseListener {
     // 能落子将棋子加入数组
     @Override
     public void mouseClicked(MouseEvent e) {
-
-        // 游戏结束不能下
-        if (isGameOver) {
-            return;
-        }
-
-
-
-        xIndex = (e.getX() - MARGIN_LEFT + GRID_SPAN / 2) / GRID_SPAN;
-        yIndex = (e.getY() - MARGIN_TOP + GRID_SPAN / 2) / GRID_SPAN;
-
-        // 超出行和列的范围就不能下
-        if (xIndex < 0 || xIndex > ROWS - 1 || yIndex < 0 || yIndex > COLS - 1) {
-            return;
-        }
-
-//        System.out.println("点击 (" + xIndex + "\t, " + yIndex + ")");
-
-        // 已经有棋子的地方也不能下
-        if (isExistChess(xIndex, yIndex)) {
-            return;
-        }
-
-        ChessPoint chessPoint = new ChessPoint(xIndex, yIndex, isBlack ? Color.BLACK : Color.WHITE);
-        chessPoints[chessCount] = chessPoint;
-        chessCount++;
-
-        System.out.println("白棋下了");
-
-
-        PlaySound playSound = new PlaySound();
-        playSound.PlaySound("chess");
-        String colorName = isBlack ? "黑棋" : "白棋";
-
-        if (isWin()) {
-            JOptionPane.showMessageDialog(this, "恭喜 " + colorName + " 赢了");
-            isGameOver = true;
-        }
-        repaint();
-        // AI  // TODO
-        AI ai = new AI();
-        ai.Ai(this);
-        isBlack=false;
-
-        if ((ai.xChess != -1 || ai.yChess != -1) ) {
-
-            ChessPoint aichessPoint = new ChessPoint(ai.xChess, ai.yChess, isBlack ? Color.BLACK : Color.WHITE);
-            xIndex = ai.xChess;
-            yIndex = ai.yChess;
-            chessPoints[chessCount] = aichessPoint;
-            chessCount++;
-            System.out.println("ai下了");
-            for (int j = 0; j < chessCount; j++) {
-                if (chessPoints[j].getX() == ai.xChess && chessPoints[j].getY() == ai.yChess) {
-//                    System.out.println(chessPoints[j].getColor() + "AI棋子颜色");
-                    break;
-                }
-
+        AlphaBetaCutBranch alphaBetaCutBranch = new AlphaBetaCutBranch(0, 2,1, -999990000, 999990000, 1,this);
+        if (isAistop) {
+            paintTipChess();
+            // 游戏结束不能下
+            if (isGameOver) {
+                return;
             }
-            System.out.println("ai在x" + ai.xChess + "y" + ai.yChess + "上下子了");
-            ai.xChess = 0;
-            ai.yChess = 0;
+            xIndex = (e.getX() - MARGIN_LEFT + GRID_SPAN / 2) / GRID_SPAN;
+            yIndex = (e.getY() - MARGIN_TOP + GRID_SPAN / 2) / GRID_SPAN;
 
+            // 超出行和列的范围就不能下
+            if (xIndex < 0 || xIndex > ROWS - 1 || yIndex < 0 || yIndex > COLS - 1) {
+                return;
+            }
+            // 已经有棋子的地方也不能下
+            if (isExistChess(xIndex, yIndex)) {
+                return;
+            }
+//            if (isAi) {
+//                if (!isBlack) {
+//                    return;
+//                }
+//                isBlack = true;
+//            }
+            ChessPoint chessPoint = new ChessPoint(xIndex, yIndex, isBlack ? Color.BLACK : Color.WHITE);
+            chessPoints[chessCount] = chessPoint;
+            chessCount++;
+            PlaySound playSound = new PlaySound();
+            playSound.PlaySound("chess");
+            String colorName = isBlack ? "黑棋" : "白棋";
+            if (alphaBetaCutBranch.isWin()) {
+                JOptionPane.showMessageDialog(this, "恭喜 " + colorName + " 赢了");
+                isGameOver = true;
+            }
+            repaint();
+            isAistop = true;
+            if (isAi) {
+                isBlack = !isBlack;
+                System.out.println("before aiThread "+isBlack);
+                Thread thread = new Thread(aiTread);//启动AI
+                thread.start();
+            }
+            isBlack = !isBlack;
         }
-
-        // 重新画提示面板的棋子  // TODO
-        paintTipChess();
-
-        // 重画面板
-        repaint();
-
-
-        // 如果赢了就弹出提示信息
-        colorName = isBlack ? "黑棋" : "白棋";
-        if (isWin()) {
-            JOptionPane.showMessageDialog(this, "恭喜 " + colorName + " 赢了");
-            isGameOver = true;
-        }
-
-        // 交换落子方
-        isBlack = !isBlack;
-
-//        System.out.println(chessCount);
-
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+
 
     }
 
@@ -689,7 +702,7 @@ public class GameCanvas extends JPanel implements MouseListener {
     // 判断输赢
     // 赢了return true
     // 输了return false
-    private boolean isWin() {
+    public boolean is成五() {
         int xPosition; // 临时变量 x的位置
         int yPosition; // 临时变量 y的位置
         int count = 1; //连续棋子的个数
@@ -797,7 +810,6 @@ public class GameCanvas extends JPanel implements MouseListener {
         } else {
             count = 1;
         }
-
         return false;
     }
 
@@ -825,7 +837,7 @@ public class GameCanvas extends JPanel implements MouseListener {
     // 悔棋后相关操作
     public void Back() {
         if (isGameOver == true) {
-            return;
+            isGameOver = false;
         }
 
         if (chessCount == 0) {
@@ -850,17 +862,21 @@ public class GameCanvas extends JPanel implements MouseListener {
     // 游戏进行时重新开始游戏
     // 游戏结束 重新开始游戏没有效果
     public void restartGame() {
-        if (isGameOver == true) {
-            return;
-        }
+//        if (isGameOver == true) {
+//            return;
+//        }
 
         for (int i = 0; i < chessPoints.length; i++) {
             chessPoints[i] = null;
         }
-
         isGameOver = false;
         isBlack = true;
         chessCount = 0;
+        if (isAi&&aiIsBlack) {
+            Thread thread = new Thread(aiTread);//启动AI
+            thread.start();
+            isBlack=!isBlack;
+        }
         repaint();
         paintTipChess();
     }
@@ -878,5 +894,6 @@ public class GameCanvas extends JPanel implements MouseListener {
         return 2;
 
     }
+
 
 }
